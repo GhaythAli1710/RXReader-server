@@ -21,5 +21,6 @@ from app import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('test_api/', views.testAPI),
+    path('test-api/', views.testAPI),
+    path('send-image/', views.send_image),
 ]
