@@ -3,6 +3,9 @@ import io
 from PIL import Image
 from rest_framework.decorators import api_view
 from rest_framework import status
+
+from AIEngine.ED_algo import stream_to_multilabel
+from AIEngine.TrOCR import image_to_stream
 from app.models import test
 from app.serializers import TestSerializer
 from rest_framework.response import Response
@@ -25,9 +28,11 @@ def testAPI(request):
 
 
 @api_view(['POST'])
-def send_image(request):
+def receive_image(request):
     string = request.data['image']
     imgBytes = base64.b64decode(string)
     img = Image.open(io.BytesIO(imgBytes))
+    #
+    res = stream_to_multilabel(image_to_stream(img))
     img.show()
-    return Response(status=status.HTTP_200_OK)
+    return Response({'closest drug names': res}, status=status.HTTP_200_OK)
